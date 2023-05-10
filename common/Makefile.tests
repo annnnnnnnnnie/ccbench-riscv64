@@ -14,14 +14,6 @@ OBJECTS ?= $(patsubst %.cpp,%.o,$(patsubst %.c,%.o,$(patsubst %.cc,%.o,$(SOURCES
 
 ifeq ($(ARCH),riscv)
 	include ../arch/riscv/Makefile.mk
-else ifeq ($(ARCH),tile64)
-	include ../arch/tile64/Makefile.mk
-else ifeq ($(ARCH),x86)
-	include ../arch/x86/Makefile.mk
-else ifeq ($(ARCH),arm)
-	include ../arch/arm/Makefile.mk
-else
-	include ../arch/generic/Makefile.mk
 endif
 
 

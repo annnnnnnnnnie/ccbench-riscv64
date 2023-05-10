@@ -1,4 +1,4 @@
-#! /usr/bin/env python
+#! /usr/bin/env python3
  
 # Author: Christopher Celio
 # Date  : 2012 Jan 1

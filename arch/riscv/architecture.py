@@ -1,4 +1,4 @@
-#! /usr/bin/env python
+#! /usr/bin/env python3
 
 # Author: Christopher Celio
 # Date  : 2014 Feb 21
@@ -20,6 +20,7 @@ def runBenchmark(processor, app_bin, app_args, report_filename):
     else:
         cmd = "emulator +dramsim pk " 
 
-    print cmd + app_bin + " " + app_args + " >> " + report_filename
+    print(cmd + app_bin + " " + app_args + " >> " + report_filename)
     value = ccbench.runBash(cmd + app_bin + " " + app_args + " >> " + report_filename)
-    if value != "": print value
+    if value != "": 
+        print(value)
