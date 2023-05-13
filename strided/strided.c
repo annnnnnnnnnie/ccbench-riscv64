@@ -92,7 +92,7 @@ int main(int argc, char* argv[])
    uint32_t volatile ret_val = threadMain();  
 
 #ifdef PRINT_SCRIPT_FRIENDLY
-  printf("App:[strided,NumThreads:[%d],AppSize:[%d],AppStride:[%d],Time:[%g], TimeUnits:[Time per Iteration (ns)],Cycles:[%g],NumIterations:[%d]\n",
+  printf("App:[strided,NumThreads:[%d],AppSize:[%d],AppStride:[%d],Time:[%g], TimeUnits:[Time per Iteration (ns)],Cycles:[%g],NumIterations:[%d]]\n",
     g_num_cores,
     g_arr_size,
     g_arr_stride,

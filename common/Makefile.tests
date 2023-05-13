@@ -6,15 +6,7 @@ SOURCES 	 += ../common/cctimer.c ../common/barrier.c ../common/cclfsr.c
 
 OBJECTS ?= $(patsubst %.cpp,%.o,$(patsubst %.c,%.o,$(patsubst %.cc,%.o,$(SOURCES) ) ) )
 
-
-
-# customize the build based on the architecture
-#
-#include ../arch/$(ARCH)/Makefile.mk
-
-ifeq ($(ARCH),riscv)
-	include ../arch/riscv/Makefile.mk
-endif
+include ../arch/riscv/Makefile.mk
 
 
 # Build targets

@@ -7,6 +7,7 @@
 
 #include <stdint.h>
 #include <time.h>
+#include <sys/time.h>
 
 // unit is "seconds"
 typedef double cctime_t;
