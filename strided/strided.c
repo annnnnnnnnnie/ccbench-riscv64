@@ -16,9 +16,9 @@
 //                      load A[i] from memory (4 Bytes)
 
 
-//#define DEBUG 
-//#define PRINT_ARRAY
-#define PRINT_SCRIPT_FRIENDLY
+// #define DEBUG 
+// #define PRINT_ARRAY
+// #define PRINT_SCRIPT_FRIENDLY
 
 #ifdef USING_TILERA
 #include <ilib.h>
