@@ -6,4 +6,6 @@ appSizeArg=128
 numIterations=300100
 runType=0
 
+$FIRESIM_START_TRIGGER 
 $BASEDIR/caches $appSizeArg $numIterations $runType
+$FIRESIM_END_TRIGGER
