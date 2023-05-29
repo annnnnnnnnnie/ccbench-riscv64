@@ -19,18 +19,18 @@
 
 //#define DEBUG 
 //#define PRINT_ARRAY
-#define PRINT_SCRIPT_FRIENDLY
+// #define PRINT_SCRIPT_FRIENDLY
  
 //force benchmark to run for some minimum wall-clock time
 // advantages: hopefully smoothes out noise of tests that run too quickly
 // disadvantages: adds additional code to critical loop (empirically unnoticable)
-#define USE_MIN_TIME
+// #define USE_MIN_TIME
 //min time is in (seconds) 
-#ifndef __riscv
-#define MIN_TIME (1.0)
-#else
-#define MIN_TIME (0.0025)
-#endif
+// #ifndef __riscv
+// #define MIN_TIME (1.0)
+// #else
+// #define MIN_TIME (0.0025)
+// #endif
                       
 
 // stride in # of elements, most processors have a 64byte cache line, so 16 elements
