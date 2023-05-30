@@ -28,6 +28,7 @@
 #include <stdio.h>
 #include <stdint.h>
 #include <cctimer.h>
+#include <firesim_triggers.h>
 
 
 // Global Variables
@@ -114,6 +115,8 @@ uint32_t threadMain()
 {
    cctime_t volatile start_time = cc_get_seconds(g_clk_freq);
 
+   FIRESIM_START_TRIGGER;
+
    uint32_t sum = 0;
 
    for (uint32_t i = 0; i < g_num_iterations; i++)
@@ -121,6 +124,8 @@ uint32_t threadMain()
       //stride is in 4 byte chunks, so this works out just right
       sum += g_array[(i*g_arr_stride) % g_arr_size];
    }
+
+   FIRESIM_END_TRIGGER;
 
    cctime_t volatile stop_time = cc_get_seconds(g_clk_freq);
         

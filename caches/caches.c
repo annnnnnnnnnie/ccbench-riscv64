@@ -48,6 +48,7 @@
 #include <cctimer.h>
 #include <cclfsr.h>
 #include <math.h>
+#include <firesim_triggers.h>
 
 // Global Variables
 uint32_t  g_num_cores;
@@ -166,6 +167,7 @@ uint32_t threadMain()
    // run for g_num_iterations or until MIN_TIME reached, whichever comes last
    cctime_t volatile start_time = cc_get_seconds(clk_freq);
    cctime_t volatile estimated_end_time = start_time + MIN_TIME;
+   FIRESIM_START_TRIGGER;
     
    intptr_t idx = 0;
 
@@ -185,12 +187,14 @@ uint32_t threadMain()
       }
    }
 
+   FIRESIM_END_TRIGGER;
    cctime_t volatile stop_time = cc_get_seconds(clk_freq);
 
 #else
 
    // run for g_num_iterations...
    cctime_t volatile start_time = cc_get_seconds(clk_freq);
+   FIRESIM_START_TRIGGER;
 
    intptr_t idx = 0;
 
@@ -199,6 +203,7 @@ uint32_t threadMain()
       idx = arr_n_ptr[idx];
    }
 
+   FIRESIM_END_TRIGGER;
    cctime_t volatile stop_time = cc_get_seconds(clk_freq);
 
 #endif 
