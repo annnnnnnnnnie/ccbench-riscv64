@@ -45,7 +45,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdint.h>
-#include <cctimer.h>
+// #include <cctimer.h>
 #include <cclfsr.h>
 #include <math.h>
 #include <firesim_triggers.h>
@@ -58,12 +58,6 @@ uint32_t  g_performed_iterations;
 
 int g_stride;
 int g_run_type;  // choose between stride size, or random stride 
-
-double volatile run_time_ns;
-double volatile run_time_us;
-double volatile run_time_ms;
-double volatile run_time_s;
-
 
 // Function Declarations
 uint32_t initializeGlobalArrays(uint32_t* arr_n_ptr, uint32_t num_elements, uint32_t stride);
@@ -163,37 +157,9 @@ uint32_t threadMain()
    /** CRITICAL SECTION **/
 
 //TODO time code ahead of time, and set num_iterations based on that...
-#ifdef USE_MIN_TIME
-   // run for g_num_iterations or until MIN_TIME reached, whichever comes last
-   cctime_t volatile start_time = cc_get_seconds(clk_freq);
-   cctime_t volatile estimated_end_time = start_time + MIN_TIME;
-   FIRESIM_START_TRIGGER;
-    
-   intptr_t idx = 0;
 
-   // we have to run for AT LEAST g_num_iterations, so dont muck up critical section 
-   // with unnecessary code
-   for (uint32_t k = 0; k < g_num_iterations; k++)
-   {
-      idx = arr_n_ptr[idx];
-   }
-
-   while (cc_get_seconds(clk_freq) < estimated_end_time)
-   {
-      g_performed_iterations += g_num_iterations;
-      for (uint32_t k = 0; k < g_num_iterations; k++)
-      {
-         idx = arr_n_ptr[idx];
-      }
-   }
-
-   FIRESIM_END_TRIGGER;
-   cctime_t volatile stop_time = cc_get_seconds(clk_freq);
-
-#else
 
    // run for g_num_iterations...
-   cctime_t volatile start_time = cc_get_seconds(clk_freq);
    FIRESIM_START_TRIGGER;
 
    intptr_t idx = 0;
@@ -204,21 +170,6 @@ uint32_t threadMain()
    }
 
    FIRESIM_END_TRIGGER;
-   cctime_t volatile stop_time = cc_get_seconds(clk_freq);
-
-#endif 
-
-   run_time_s = ((double) (stop_time - start_time)); 
-   run_time_ns = run_time_s * 1.0E9;
-   run_time_us = run_time_s * 1.0E6;
-   run_time_ms = run_time_s * 1.0E3;
-
-#ifdef DEBUG
-   fprintf(stderr, "Total_Time (s)             : %g\n", run_time_s);
-   fprintf(stderr, "Total_Time (ms)            : %g\n", run_time_ms);
-   fprintf(stderr, "Total_Time (us)            : %g\n", run_time_us);
-   fprintf(stderr, "Total_Time (ns)            : %g\n", run_time_ns);
-#endif
 
    // prevent compiler from removing ptr chasing...
    // although the receiver must put idx into a volatile variable as well!
