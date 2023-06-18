@@ -27,23 +27,16 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdint.h>
-#include <cctimer.h>
 #include <firesim_triggers.h>
 
 
 // Global Variables
 uint32_t* g_array;
 uint32_t  g_num_cores;
-uint32_t  g_arr_size;
-uint32_t  g_arr_stride;
-uint32_t  g_num_iterations;
+uint64_t  g_arr_size;
+uint64_t  g_arr_stride;
+uint64_t  g_num_iterations;
 double const g_clk_freq = 2.33e9;
- 
-//uint64_t total_cycle_count;
-
-double run_time_ns;
-double run_time_us;
-double run_time_s;
 
 
 // Function Declarations
@@ -65,9 +58,9 @@ int main(int argc, char* argv[])
   }
 
   g_num_cores      = atoi(argv[1]);
-  g_arr_size       = atoi(argv[2]);
-  g_arr_stride     = atoi(argv[3]);
-  g_num_iterations = atoi(argv[4]);
+  g_arr_size       = atoll(argv[2]);
+  g_arr_stride     = atoll(argv[3]);
+  g_num_iterations = atoll(argv[4]);
 
   if (g_num_cores != 1)
   {
@@ -85,23 +78,12 @@ int main(int argc, char* argv[])
    g_array  = (uint32_t *) malloc((g_arr_size) * sizeof(uint32_t));
 
    //initialize to bring it into the cache 
-   for (uint32_t i = 0; i < g_arr_size; i++)
+   for (uint64_t i = 0; i < g_arr_size; i++)
    {
       g_array[i] = 1;
    }
   
    uint32_t volatile ret_val = threadMain();  
-
-#ifdef PRINT_SCRIPT_FRIENDLY
-  printf("App:[strided,NumThreads:[%d],AppSize:[%d],AppStride:[%d],Time:[%g], TimeUnits:[Time per Iteration (ns)],Cycles:[%g],NumIterations:[%d]]\n",
-    g_num_cores,
-    g_arr_size,
-    g_arr_stride,
-    (double) run_time_ns / (double) g_num_iterations,
-    (double) run_time_ns / (double) g_num_iterations  * g_clk_freq,
-    g_num_iterations
-    );
-#endif
 
 #ifdef DEBUG
   fprintf(stderr, "Done. Exiting...\n\n");
@@ -113,31 +95,17 @@ int main(int argc, char* argv[])
 
 uint32_t threadMain()
 {
-   cctime_t volatile start_time = cc_get_seconds(g_clk_freq);
-
    FIRESIM_START_TRIGGER;
 
    uint32_t sum = 0;
 
-   for (uint32_t i = 0; i < g_num_iterations; i++)
+   for (uint64_t i = 0; i < g_num_iterations; i++)
    {
       //stride is in 4 byte chunks, so this works out just right
       sum += g_array[(i*g_arr_stride) % g_arr_size];
    }
 
    FIRESIM_END_TRIGGER;
-
-   cctime_t volatile stop_time = cc_get_seconds(g_clk_freq);
-        
-   run_time_s = ((double) (stop_time - start_time)); 
-   run_time_ns = run_time_s * 1.0E9;
-   run_time_us = run_time_s * 1.0E6;
-
-#ifdef DEBUG
-   printf("Total_Time (s)             : %f\n", run_time_s);
-   printf("Total_Time (us)            : %f\n", run_time_us);
-   printf("Total_Time (ns)            : %f\n", run_time_ns);
-#endif
 
   return sum; //prevent compiler from removing our work...
 }
